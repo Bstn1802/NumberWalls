@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark light">
+    <title>Number Walls</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="fraction.js"></script>
+    <script src="sequences.js"></script>
+    <script src="colors.js"></script>
+    <script src="algorithm.js"></script>
+    <script src="canvas.js" defer></script>
+    <script src="ui.js" defer></script>
+    <script src="events.js" defer></script>
+</head>
+
+<body style="display: none;">
+    <div id="menu">
+        <h1>Number Walls</h1>
+        <fieldset class="collapsed">
+            <legend>Introduction</legend>
+            <p><i>Work in progress!</i></p>
+            <p>
+                Note that the first two rows are all zeros and ones. The third row can be any sequence of numbers. You
+                can change it below. The rest of the grid is calculated in a way that for every number the product of
+                the one above and the one below and the product of the one to the left and the one to the right sum up
+                to the value of the square of the number. In short:
+            </p>
+            <code>above * below + left * right = center * center</code>
+            <p>
+                You can click on a number to see more information about it at the bottom. You'll find its coordinates in
+                the grid and the rule that has been used to calculate it. To learn more about those, I recommend
+                watching <a href="https://www.youtube.com/watch?v=NO1_-qptr6c">this</a> video. In this implementation
+                there are a few more rules. More information about those is to be added...
+            </p>
+            <p>
+                Also note that you can move around freely inside the grid and zoom in or out to a certain degree using
+                mouse, touchpad and even touchscreen controls.
+            </p>
+            <p>Have fun exploring number walls!</p>
+        </fieldset>
+        <fieldset>
+            <legend>Sequence</legend>
+            <p>Select a sequence from below or select "Custom..." and write your own sequence in Javascript!</p>
+            <select id="sequence-select" data-option="fibonacci">
+                <option value="fibonacci">Fibonacci</option>
+                <option value="power" data-param="2" data-param-min="1" data-param-step="1">Power</option>
+                <option value="pagoda">Pagoda</option>
+                <option value="triangular">Triangular</option>
+                <option value="exponential" data-param="2" data-param-min="2" data-param-step="1">Exponential</option>
+                <option value="dakota">Dakota</option>
+                <option value="round" data-param="0.23">Round</option>
+                <option value="custom">Custom...</option>
+            </select>
+
+            <p class="custom-target">
+                Take parameter n and return the n-th element of your sequence (must be integral, can be BigInt):
+            </p>
+            <span id="sequence-code-error" role="alert" class="error custom-target"></span>
+            <textarea id="sequence-code" type="text" rows="3" class="code custom-target" spellcheck="false"
+                autocomplete="off" autocapitalize="false">return 0;</textarea>
+            <button id="sequence-code-apply" class="custom-target" title="Alt+Enter">Apply</button>
+
+            <input type="number" id="sequence-param" class="param">
+        </fieldset>
+        <fieldset>
+            <legend>Colors</legend>
+            <p>
+                Select a color scheme and let numbers have a different background depending on certain conditions or
+                code your on color scheme in JavaScript!
+            </p>
+            <select id="color-scheme-select" data-option="divisible">
+                <option value="single">Single</option>
+                <option value="divisible" data-param="2" data-param-min="2" data-param-step="1">Divisible</option>
+                <option value="divisibleExtra" data-param="2" data-param-min="2" data-param-step="1">Divisible+</option>
+                <option value="modulo" data-param="2" data-param-min="2" data-param-step="1">Modulo</option>
+                <option value="custom">Custom...</option>
+            </select>
+
+            <p class="custom-target">
+                Take parameter n of type BigInt and return a valid CSS color value as a string (e.g. "#777", "red",
+                "hsl(120, 100%, 25%)"):
+            </p>
+            <span id="color-scheme-code-error" role="alert" class="error custom-target"></span>
+            <textarea id="color-scheme-code" type="text" rows="3" class="code custom-target" spellcheck="false"
+                autocomplete="off" autocapitalize="false">return "#777";</textarea>
+            <button id="color-scheme-code-apply" class="custom-target" title="Alt+Enter">Apply</button>
+
+            <input type="number" id="color-scheme-param" class="param">
+        </fieldset>
+        <fieldset>
+            <legend>Options</legend>
+            <button id="resetCanvas">Reset canvas</button>
+            <label class="block"><input type="checkbox" id="checkBoxShowNumbers" checked> Show numbers</label>
+            <p><i>More to come...</i></p>
+            <br>
+            <b>Debug options</b>
+            <label class="block pointer"><input type="checkbox" id="checkBoxShowTimes"> Show times</label>
+            <label class="block pointer"><input type="checkbox" id="checkBoxDebugText"> Debug text</label>
+            <label class="block has-info"
+                title="still allows panning and zooming but prevents recalculating the numbers">
+                <input type="checkbox" id="checkBoxFreezeGrid"> Freeze grid</label>
+        </fieldset>
+    </div>
+    <main id="viewport">
+        <canvas id="canvas" oncontextmenu="return false"></canvas>
+        <footer id="footer">
+            <div id="selected"></div>
+            <div id="times"></div>
+        </footer>
+    </main>
+</body>
+
+</html>

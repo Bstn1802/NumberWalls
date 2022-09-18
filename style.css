@@ -1,0 +1,158 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300&display=swap");
+
+*,
+*::after,
+*::before {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body,
+html {
+  height: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  padding: 0.2em;
+  cursor: pointer;
+}
+
+:root {
+  --background-color: #eee;
+  --background-color-transparent: #eee7;
+  --foreground-color: black;
+  --error-color: #a00;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background-color: #222;
+    --background-color-transparent: #2227;
+    --foreground-color: #eee;
+    --error-color: #f44;
+  }
+}
+
+body {
+  overflow: hidden;
+  line-height: 1.5;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  font-family: "Roboto", Arial, Helvetica, sans-serif;
+}
+
+#viewport {
+  position: relative;
+  overflow: hidden;
+  flex-grow: 1;
+}
+
+#footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  color: var(--foreground-color);
+  background-color: var(--background-color-transparent);
+}
+
+#footer > :not(:empty) {
+  margin: 0.2em 0.5em;
+}
+
+#menu {
+  width: max(25vw, 30ch);
+  background: var(--background-color);
+  z-index: 1;
+  color: var(--foreground-color);
+  overflow: auto;
+  padding: 1em;
+  box-shadow: 0 0 1em 0 #000;
+}
+
+#menu fieldset {
+  margin-top: 0.8em;
+  padding: 0.6em;
+  padding-top: 0;
+  border: 1px solid var(--foreground-color);
+  border-radius: 0.2em;
+}
+
+#menu fieldset legend {
+  cursor: pointer;
+  font-size: 1.5em;
+}
+
+#menu fieldset legend::after {
+  cursor: default;
+  content: "";
+  display: inline-block;
+  margin: 0 0.4em;
+  width: 0.5em;
+  height: 0.5em;
+  rotate: 225deg;
+  translate: 0 0.15em;
+  border-right: 1px solid var(--foreground-color);
+  border-bottom: 1px solid var(--foreground-color);
+}
+
+#menu fieldset > :not(legend) {
+  margin-top: 0.4em;
+  width: 100%;
+}
+
+#menu fieldset.collapsed {
+  padding-top: 0;
+  padding-bottom: 0;
+  border-radius: 0;
+  border-color: transparent;
+  border-top-color: inherit;
+}
+
+#menu fieldset.collapsed legend::after {
+  rotate: 45deg;
+  translate: 0 -0.25em;
+}
+
+#menu fieldset.collapsed :not(legend) {
+  display: none;
+}
+
+textarea {
+  padding: 0.2em 0.5em;
+  resize: vertical;
+}
+
+.code {
+  white-space: nowrap;
+  font-family: "Roboto Mono", "Courier New", Courier, monospace;
+}
+
+.error {
+  color: var(--error-color);
+}
+
+.error:empty,
+select:not([data-option="custom"]) ~ .custom-target,
+select:not([data-requires-param]) ~ .param {
+  display: none;
+}
+
+.has-info {
+  cursor: help;
+}
+
+.block {
+  display: block;
+}
+
+.pointer {
+  cursor: pointer;
+}
