@@ -1,6 +1,19 @@
 const sequences = {
     current: undefined,
     param: undefined,
+    // must be an object to allow negative indeces
+    data: {},
+    getFromCurrent(n) {
+        if (n in sequences.data) {
+            return sequences.data[n];
+        }
+        const currentFunction = sequences[sequences.current];
+        sequences.data[n] = currentFunction(n);
+        return sequences.data[n];
+    },
+    resetData() {
+        sequences.data = {};
+    },
     custom: () => 0,
     round(n) {
         return Math.round(sequences.param * n);
@@ -57,16 +70,17 @@ const sequences = {
     },
     hofstadterQ(n) {
         // undefined for n < 1
-        if (n < 1) {
-            return 0;
+        if (n < 0) {
+            // mirror
+            return n = Math.abs(n);
         }
-        if ((n == 1) || (n==2)) {
+        if ((n == 1) || (n==2) || (n==0)) {
             return 1;
         }
-        const firstTermIndex = n - sequences.hofstadterQ(n-1);
-        const secondTermIndex = n - sequences.hofstadterQ(n-2);
-        const firstTerm = sequences.hofstadterQ(firstTermIndex);
-        const secondTerm = sequences.hofstadterQ(secondTermIndex);
+        const firstTermIndex = n - sequences.getFromCurrent(n-1);
+        const secondTermIndex = n - sequences.getFromCurrent(n-2);
+        const firstTerm = sequences.getFromCurrent(firstTermIndex);
+        const secondTerm = sequences.getFromCurrent(secondTermIndex);
         return firstTerm + secondTerm;
     },
     dakotaB(n) {

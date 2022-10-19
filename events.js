@@ -105,6 +105,7 @@ const events = {
         const element = ui.sections.sequence.select;
         const option = element[element.selectedIndex];
         sequences.current = option.value;
+        sequences.resetData();
         if (option.dataset.param) {
             element.dataset.requiresParam = "";
             sequences.param = option.dataset.param;
