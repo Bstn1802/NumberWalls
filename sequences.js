@@ -55,6 +55,20 @@ const sequences = {
         }
         return b;
     },
+    hofstadterQ(n) {
+        // undefined for n < 1
+        if (n < 1) {
+            return 0;
+        }
+        if ((n == 1) || (n==2)) {
+            return 1;
+        }
+        const firstTermIndex = n - sequences.hofstadterQ(n-1);
+        const secondTermIndex = n - sequences.hofstadterQ(n-2);
+        const firstTerm = sequences.hofstadterQ(firstTermIndex);
+        const secondTerm = sequences.hofstadterQ(secondTermIndex);
+        return firstTerm + secondTerm;
+    },
     dakotaB(n) {
         if (n == 0) return 0;
         else while (n % 2 == 0) {
@@ -64,5 +78,5 @@ const sequences = {
     },
     dakotaC: n => n == 0 ? 1 : sequences.dakotaB(2 * n) - 2 * sequences.dakotaB(2 * n - 1) + 3,
     dakotaF: n => n == 1 ? [0, 1] : n == 2 ? [1, -1] : n == 3 ? [0, -1] : [1, 0],
-    dakota: n => n < 0 ? 0 : sequences.dakotaF(sequences.dakotaC(Math.floor(n / 2)))[n % 2]
+    dakota: n => n < 0 ? 0 : sequences.dakotaF(sequences.dakotaC(Math.floor(n / 2)))[n % 2],
 }
