@@ -44,29 +44,16 @@ const sequences = {
         return Number(solution == Math.floor(solution));
     },
     fibonacci(n) {
-        // no floating point precision issues up to 60
-        if (Math.abs(n) < 60) {
-            return BigInt(Math.round((Math.pow(0.5 * (1 + Math.sqrt(5)), n) - Math.pow(0.5 * (1 - Math.sqrt(5)), n)) / Math.sqrt(5)));
+        if (n < 0) {
+            n = Math.abs(n);
         }
-        // get access to already calculated numbers
-        const previous = algorithm.data[2];
-        // recursive definition backward and forward
-        if (n - 2 in previous && n - 1 in previous) {
-            return previous[n - 2].value + previous[n - 1].value;
+        if ((n == 1) || (n==2)) {
+            return 1;
         }
-        if (n + 2 in previous && n + 1 in previous) {
-            return previous[n + 2].value - previous[n + 1].value;
+        if (n == 0) {
+            return 0;
         }
-        // start from last two reliably in constant time computable terms and use the recursive formula
-        let a = sequences.fibonacci(58), b = sequences.fibonacci(59);
-        for (let i = 59; i < Math.abs(n); i++) {
-            [a, b] = [b, a + b];
-        }
-        // rule for negative numbers
-        if (n < 0 && n % 2 == 0) {
-            b = -b;
-        }
-        return b;
+        return sequences.getFromCurrent(n-1) + sequences.getFromCurrent(n-2);
     },
     hofstadterQ(n) {
         // undefined for n < 1
