@@ -1,6 +1,19 @@
 const sequences = {
     current: undefined,
     param: undefined,
+    // must be an object to allow negative indeces
+    data: {},
+    getFromCurrent(n) {
+        if (n in sequences.data) {
+            return sequences.data[n];
+        }
+        const currentFunction = sequences[sequences.current];
+        sequences.data[n] = currentFunction(n);
+        return sequences.data[n];
+    },
+    resetData() {
+        sequences.data = {};
+    },
     custom: () => 0,
     round(n) {
         return Math.round(sequences.param * n);
@@ -31,29 +44,30 @@ const sequences = {
         return Number(solution == Math.floor(solution));
     },
     fibonacci(n) {
-        // no floating point precision issues up to 60
-        if (Math.abs(n) < 60) {
-            return BigInt(Math.round((Math.pow(0.5 * (1 + Math.sqrt(5)), n) - Math.pow(0.5 * (1 - Math.sqrt(5)), n)) / Math.sqrt(5)));
+        if (n < 0) {
+            n = Math.abs(n);
         }
-        // get access to already calculated numbers
-        const previous = algorithm.data[2];
-        // recursive definition backward and forward
-        if (n - 2 in previous && n - 1 in previous) {
-            return previous[n - 2].value + previous[n - 1].value;
+        if ((n == 1) || (n==2)) {
+            return 1;
         }
-        if (n + 2 in previous && n + 1 in previous) {
-            return previous[n + 2].value - previous[n + 1].value;
+        if (n == 0) {
+            return 0;
         }
-        // start from last two reliably in constant time computable terms and use the recursive formula
-        let a = sequences.fibonacci(58), b = sequences.fibonacci(59);
-        for (let i = 59; i < Math.abs(n); i++) {
-            [a, b] = [b, a + b];
+        return sequences.getFromCurrent(n-1) + sequences.getFromCurrent(n-2);
+    },
+    hofstadterQ(n) {
+        // undefined for n < 1
+        if (n < 1) {
+            return 0;
         }
-        // rule for negative numbers
-        if (n < 0 && n % 2 == 0) {
-            b = -b;
+        if ((n == 1) || (n==2)) {
+            return 1;
         }
-        return b;
+        const firstTermIndex = n - sequences.getFromCurrent(n-1);
+        const secondTermIndex = n - sequences.getFromCurrent(n-2);
+        const firstTerm = sequences.getFromCurrent(firstTermIndex);
+        const secondTerm = sequences.getFromCurrent(secondTermIndex);
+        return firstTerm + secondTerm;
     },
     dakotaB(n) {
         if (n == 0) return 0;
@@ -64,5 +78,5 @@ const sequences = {
     },
     dakotaC: n => n == 0 ? 1 : sequences.dakotaB(2 * n) - 2 * sequences.dakotaB(2 * n - 1) + 3,
     dakotaF: n => n == 1 ? [0, 1] : n == 2 ? [1, -1] : n == 3 ? [0, -1] : [1, 0],
-    dakota: n => n < 0 ? 0 : sequences.dakotaF(sequences.dakotaC(Math.floor(n / 2)))[n % 2]
+    dakota: n => n < 0 ? 0 : sequences.dakotaF(sequences.dakotaC(Math.floor(n / 2)))[n % 2],
 }

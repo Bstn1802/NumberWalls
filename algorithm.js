@@ -234,14 +234,13 @@ const algorithm = {
                 delete algorithm.data[2][key];
             }
         }
-        const sequence = sequences[sequences.current];
         const colorScheme = colors[colors.current];
         const color = n => ({ value: n, color: n === undefined ? undefined : colorScheme(n) });
         // set first three rows
         for (let x = left; x <= right; x++) {
             algorithm.data[0][x] = color(0n);
             algorithm.data[1][x] = color(1n);
-            algorithm.data[2][x] = color(BigInt(sequence(x)));
+            algorithm.data[2][x] = color(BigInt(sequences.getFromCurrent(x)));
         }
         // shrink height
         for (let key in algorithm.data) {
