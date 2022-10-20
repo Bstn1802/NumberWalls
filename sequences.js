@@ -57,11 +57,10 @@ const sequences = {
     },
     hofstadterQ(n) {
         // undefined for n < 1
-        if (n < 0) {
-            // mirror
-            return n = Math.abs(n);
+        if (n < 1) {
+            return 0;
         }
-        if ((n == 1) || (n==2) || (n==0)) {
+        if ((n == 1) || (n==2)) {
             return 1;
         }
         const firstTermIndex = n - sequences.getFromCurrent(n-1);
